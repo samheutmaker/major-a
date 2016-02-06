@@ -54,7 +54,7 @@ This route creates a new user in the database and returns an authorization token
 
 **/login**
 
-The /login route is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of encoding a username and password in preperation for logging in.
+The /login route is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of preparing a username and password for logging in.
 ```.js
 // user email and password
 var email = 'example@example.com';
