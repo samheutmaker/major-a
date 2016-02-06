@@ -3,6 +3,7 @@ const jsonParser = require('body-parser').json();
 const mongoose = require('mongoose');
 const basicHTTP = require(__dirname + '/lib/basic-http');
 const authCheck = require(__dirname + '/lib/check-token');
+const adminCheck = require(__dirname + '/lib/check-admin');
 
 // Models
 const User = require(__dirname + '/models/user');
@@ -14,12 +15,18 @@ const userTracking = require(__dirname + '/lib/analytics/user-tracking');
 // Create Router
 var majorA = module.exports = exports = express.Router();
 
+module.exports = {
+  majorARouter: majorA,
+  majorAAuth: authCheck
+    // majorAAdmin: adminCheck
+};
+
 //========== ROUTES ==========//
 
 // See analytics for signed in user
 majorA.get('/tracking', authCheck, (req, res) => {
   UserAnalytics.find({
-    owner_id: res.user._id
+    owner_id: req.user._id
   }, (err, data) => {
     res.json(data);
   })
