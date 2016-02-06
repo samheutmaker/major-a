@@ -12,14 +12,12 @@ const UserAnalytics = require(__dirname + '/models/user-analytics');
 const userTracking = require(__dirname + '/lib/analytics/user-tracking');
 
 // Create Router
-var authRouter = module.exports = exports = express.Router();
+var majorA = module.exports = exports = express.Router();
 
-
-//========== ROUTES ==========// 
-
+//========== ROUTES ==========//
 
 // See analytics for signed in user
-authRouter.get('/tracking', authCheck, (req, res) => {
+majorA.get('/tracking', authCheck, (req, res) => {
   UserAnalytics.find({
     owner_id: res.user._id
   }, (err, data) => {
@@ -27,12 +25,11 @@ authRouter.get('/tracking', authCheck, (req, res) => {
   })
 });
 
-
 // Create new User
-authRouter.post('/register', jsonParser, (req, res) => {
+majorA.post('/register', jsonParser, (req, res) => {
   // Check email and password length
   if (!((req.body.email || "").length && (req.body.password || "").length >
-    7)) {
+      7)) {
     return res.status(400).json({
       msg: 'Email or password not long enough'
     })
@@ -78,7 +75,7 @@ authRouter.post('/register', jsonParser, (req, res) => {
 
 
 // User Login
-authRouter.get('/login', basicHTTP, (req, res) => {
+majorA.get('/login', basicHTTP, (req, res) => {
   // Check DB for user
   User.findOne({
     'authentication.email': req.basicHTTP.email
