@@ -74,7 +74,7 @@ This route returns an authorization token in an object. The token is accessible 
 The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including majorAuth in your route middleware:
 
 
-NOTE: majorAuth should always be the first middle registered
+NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package. 
 ```.js
 
 const express = require('express');
@@ -98,7 +98,7 @@ app.post('/someprotetedroute', mAuth, (req, res) {
 })
 ```
 
-If the user making the requeset does not have an authorization token, a 401 Unauthorized will be returned and no further middleware will be executed.
+If the user making the request does not have an authorization token, a 401 Unauthorized will be returned and no further middleware will be executed.
 
 ##**MajorAdmin**
 
@@ -111,7 +111,46 @@ Major-A supports authentication for administrators through the use of a major.js
 }
 ```
 
-The MajorAdmin middleware is used to authenticate a user as an administrator and thus grant them access to administrator routes. Making a route accessable only to administrators
+The majorAdmin middleware is used to grant or deny access to administrator routes based on whether or not the users email matches any of the in the ```major.json``` file. Making a route only accessable to administrators is as easy as:
+
+NOTE: majorAdmin should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package. 
+```.js
+
+const express = require('express');
+const mongoose = require('mongoose');
+// Create express app
+const app = express();
+// Connect to MONGO DB
+mongoose.connect('YOUR_MONGO_DB_STRING');
+// require Major-A
+const m = require('major-a');
+// Create majorA Utilities
+const mRouter  = m.majorRouter;
+const mAuth   = m.majorAuth;
+const mAdmin  = m.majorAdmin; 
+
+// Protected Route
+app.post('/someprotetedroute', mAuth, (req, res) {
+  // This will only run if the request the passes the authentication check
+  // the user object is accessible through req.user
+  // Do protected stuff here
+})
+```
+
+If the user making the request does not have administator privilages, a 401 Unauthorized will be returned and no further middleware will be executed.
+
+##**majorAnalytics**
+
+MajorAnalytics is Major-A's built in analytics package. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all users and generates the following information for eaech user.
+
+#######The overview contains:
+The date the user joined
+How many time the user has logged in
+The total number of requests made by the user
+The complete amount of time spent active by user
+The time of the users most recent request
+
+#######Each session contains
 
 
 
