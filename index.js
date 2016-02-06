@@ -1,6 +1,6 @@
 // For Logging
 const colors = require('colors');
-const logNote = 'MAJOR-A -- '.red;
+const logNote = 'MAJOR-A -- '.white;
 
 // Get Admin Settings
 const fs = require('fs');
@@ -10,6 +10,10 @@ try {
 
   if (!Array.isArray(adminList) || adminList.length === 0) {
     console.log(logNote + 'NO ADMINISTATORS SET'.red);
+  } else {
+    adminList.forEach(function(currentAdmin, adminIndex) {
+      console.log(logNote + (currentAdmin + ' added to admin list').green);
+    })
   }
 } catch (e) {
   console.log(logNote + 'COUNLD NOT FIND MAJOR.JSON, NO ADMINISTATORS SET'.red);
