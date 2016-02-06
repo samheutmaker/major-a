@@ -71,7 +71,7 @@ This route returns an authorization token in an object. The token is accessible 
 
 ***MajorAuth***
 
-The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including mAuth in your route middleware:
+The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including majorAuth in your route middleware:
 
 ```.js
 
