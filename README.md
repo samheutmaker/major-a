@@ -4,7 +4,7 @@ Simple user authentication and tracking middleware for Connect/Express.
 
 Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user actvities per session, with a new session beginning everytime a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity. See Tracking and Sessions for more info on tracking and sessions. See Administration for info on setting up admin.
 
-Getting Started:
+###Getting Started:
 ```
 $ npm install --save major-a
 ```
@@ -33,11 +33,11 @@ const mAuth   = m.majorAuth;
 const mAdmin  = m.majorAdmin; 
 ```
 
-***MajorRouter***
+##**MajorRouter**
 
 MajorRouter contains three routes: one for registering a new user, one for logging in an existing user, and one that requires admin privilages and returns the tracking profile of the specified user.
 
-**/register**
+###/register
 
 The /register route is used to register new users. Registration requires as email and a password. Data must be passed as JSON in the body of the request in an object whose key is 'authentication' like so:
 
@@ -52,7 +52,7 @@ The /register route is used to register new users. Registration requires as emai
 This route creates a new user in the database and returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the header of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
 
 
-**/login**
+###/login
 
 The /login route is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of preparing a username and password for logging in.
 ```.js
@@ -69,10 +69,12 @@ var finalAuthString = 'Basic ' + authString;
 ```
 This route returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the headers of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
 
-***MajorAuth***
+##**MajorAuth**
 
 The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including majorAuth in your route middleware:
 
+
+NOTE: majorAuth should always be the first middle registered
 ```.js
 
 const express = require('express');
@@ -94,5 +96,16 @@ app.post('/someprotetedroute', mAuth, (req, res) {
   // the user object is accessible through req.user
   // Do protected stuff here
 })
+```
+
+If the user making the requeset does not have an authorization token, a 401 Unauthorized will be returned and no further middleware will be executed.
+
+##**MajorAdmin**
+
+###Getting Started
+Major-A supports authentication for administrators through the use of a major.json file placed in the root directory of your project. You can add administrators to your project placing their email address in an array with the key ```administrators```
+
+The MajorAdmin middleware is used to authenticate a user as an administrator and thus grant them access to administrator routes. Making a route accessable only to administrators
+
 
 
