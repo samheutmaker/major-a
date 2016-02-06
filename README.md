@@ -171,6 +171,7 @@ MajorAnalytics currently only supports tracking for logged in users. If someone 
 ####Accessing tracking information through api
 A user with administrator privelages can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to recieve
 
-
+###Contributors
+####samheutmaker@gmail.com  
 
 
