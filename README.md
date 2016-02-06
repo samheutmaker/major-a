@@ -144,7 +144,7 @@ If the user making the request does not have administator privilages, a 401 Unau
 
 ###Getting Started
 
-MajorAnalytics is Major-A's built in analytics package. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all LOGGED IN users and generates the following information for each user.
+MajorAnalytics is Major-A's built in analytics package. It will automatically create a `useranalytics` collection in your database and store records in it. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all LOGGED IN users and generates the following information for each user.
 
 ######The overview contains:
 
@@ -163,6 +163,13 @@ The date/time the beginning of this session | `Date`
 The date/time of the last request made during this session | `Number` 
 The number of requests made by the user during this session | `Number` 
 The duration of this session | `Time, milliseconds` 
+
+This information is stored in the user 
+
+MajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it. 
+
+####Accessing tracking information through api
+A user with administrator privelages can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to recieve
 
 
 
