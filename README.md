@@ -51,6 +51,7 @@ The /register route is used to register new users. Registration requires as emai
 ```
 This route creates a new user in the database and returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the headers of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
 
+
 **/login**
 
 The /login route is used for logging in existing users. The email and password of the user must sent as Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of encoding a username and password for in preperation for logging in.
@@ -69,6 +70,7 @@ var finalAuthString = 'Basic ' + authString;
 This route returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the headers of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
 
 ***MajorAuth***
+
 The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including mAuth in your route middleware:
 
 ```.js
