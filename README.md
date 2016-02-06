@@ -13,7 +13,7 @@ $ npm install --save major-a
 const m = require('major-a');
 
 // Create majorA Utilities
-const mRouter  = m.majorARouter;
-const mAuth   = m.majorAAuth;
-const mAdmin  = m.majorAAdmin(); // NOTE: majorAAdmin must be called as a function
+const mRouter  = m.majorRouter;
+const mAuth   = m.majorAuth;
+const mAdmin  = m.majorAdmin; 
 
