@@ -1,9 +1,28 @@
+// For Logging
+const colors = require('colors');
+const logNote = 'MAJOR-A -- '.red;
+
+// Get Admin Settings
+const fs = require('fs');
+try {
+  const settings = fs.readFileSync(__dirname + '/../../major.json').toString();
+  var adminList = JSON.parse(settings).admin;
+
+  if (!Array.isArray(adminList) || adminList.length === 0) {
+    console.log(logNote + 'NO ADMINISTATORS SET'.red);
+  }
+} catch (e) {
+  console.log(logNote + 'COUNLD NOT FIND MAJOR.JSON, NO ADMINISTATORS SET'.red);
+  var adminList = [];
+}
+
+// Get Dependencies
 const express = require('express');
 const jsonParser = require('body-parser').json();
 const mongoose = require('mongoose');
 const basicHTTP = require(__dirname + '/lib/basic-http');
 const authCheck = require(__dirname + '/lib/check-token');
-const adminCheck = require(__dirname + '/lib/check-admin');
+const adminCheck = require(__dirname + '/lib/admin-check')(adminList);
 
 // Models
 const User = require(__dirname + '/models/user');
@@ -17,16 +36,19 @@ var majorA = module.exports = exports = express.Router();
 
 module.exports = {
   majorARouter: majorA,
-  majorAAuth: authCheck
-    // majorAAdmin: adminCheck
+  majorAAuth: authCheck,
+  majorAAdmin: adminCheck()
 };
 
 //========== ROUTES ==========//
 
 // See analytics for signed in user
-majorA.get('/tracking', authCheck, (req, res) => {
+majorA.get('/tracking/:id', adminCheck(), (req, res) => {
+  if (!req.params.id) {
+    req.params.id = req.user._id
+  }
   UserAnalytics.find({
-    owner_id: req.user._id
+    owner_id: req.params.id
   }, (err, data) => {
     res.json(data);
   })
