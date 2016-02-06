@@ -104,6 +104,12 @@ If the user making the requeset does not have an authorization token, a 401 Unau
 
 ###Getting Started
 Major-A supports authentication for administrators through the use of a major.json file placed in the root directory of your project. You can add administrators to your project placing their email address in an array with the key ```administrators```
+#####major.json
+```.json
+{
+  "administrators" : [ "admin@exmaple.com", "admin2@exmaple.com"]
+}
+```
 
 The MajorAdmin middleware is used to authenticate a user as an administrator and thus grant them access to administrator routes. Making a route accessable only to administrators
 
