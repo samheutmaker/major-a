@@ -142,11 +142,13 @@ If the user making the request does not have administator privilages, a 401 Unau
 
 ##**majorAnalytics**
 
-MajorAnalytics is Major-A's built in analytics package. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all users and generates the following information for eaech user.
+###Getting Started
+
+MajorAnalytics is Major-A's built in analytics package. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all LOGGED IN users and generates the following information for each user.
 
 ######The overview contains:
 
-Records | As 
+Record | As 
 --- | --- 
 The date/time the user joined | `Date` 
 How many time the user has logged in | `Number` 
@@ -155,6 +157,13 @@ The complete amount of time spent active by user | `Time, milliseconds`
 The date/time of the users most recent request | `Date` 
 
 ######Each session contains
+Record | As 
+--- | --- 
+The date/time the beginning of this session | `Date` 
+The date/time of the last request made during this session | `Number` 
+The number of requests made by the user during this session | `Number` 
+The duration of this session | `Time, milliseconds` 
+
 
 
 
