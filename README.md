@@ -89,7 +89,7 @@ const mAuth   = m.majorAuth;
 const mAdmin  = m.majorAdmin; 
 
 // Protected Route
-app.post('/someprotetedroute', mAuth (req, res) {
+app.post('/someprotetedroute', mAuth, (req, res) {
   // This will only run if the request the passes the authentication check
   // the user object is accessible through req.user
   // Do protected stuff here
