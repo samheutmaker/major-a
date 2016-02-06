@@ -1,0 +1,37 @@
+{
+  "name": "major-a",
+  "version": "0.0.1",
+  "description": "A simple and easy to implement user authentication and tracking module for Express.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samheutmaker/major-a.git"
+  },
+  "keywords": [
+    "user",
+    "athentication",
+    "tracking",
+    "analytics",
+    "security",
+    "bcrypt"
+  ],
+  "author": "samheutmaker@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/samheutmaker/major-a/issues"
+  },
+  "homepage": "https://github.com/samheutmaker/major-a#readme",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "jsonwebtoken": "^5.5.4",
+    "mongoose": "^4.4.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5"
+  }
+}
