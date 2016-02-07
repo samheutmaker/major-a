@@ -60,7 +60,7 @@ MajorRouter contains three routes: one for registering a new user, one for loggi
 <a name="register"></a>
 ####/register
 
-The /register route is used to register new users. Registration requires as email and a password. Data must be passed as JSON in the body of the request in an object whose key is 'authentication' like so:
+The `/register` route supports the `POST` HTTP verb and is used to register new users. Registration requires as email and a password. Data must be passed as JSON in the body of the request in an object whose key is 'authentication' like so:
 
 ```.json
 {
@@ -75,7 +75,7 @@ This route creates a new user in the database and returns an authorization token
 <a name="login"></a>
 ####/login
 
-The /login route is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of preparing a username and password for logging in.
+The `/login` route supports the `GET` HTTP verb and is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of preparing a username and password for logging in.
 ```.js
 // user email and password
 var email = 'example@example.com';
@@ -89,6 +89,18 @@ authString = btoa(authString);
 var finalAuthString = 'Basic ' + authString; 
 ```
 This route returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the headers of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
+
+<a name="tracking"></a>
+####/tracking/:id
+The `/tracking/:id` route supports the `GET` HTTP verb and requires administrator privileges to acces. The route returns the tracking information of the user whose _id correpsponds to `:id` in the route.
+An example AJAX request to this point that will return the tracking info for a user with an _id of `12345678910` looks like this:
+```.js
+
+$.ajax.get('http://localhost:8888/tracking/:12345678910', function(data) {
+ // Log tracking data
+ console.log(data);
+});
+````
 
 <a name="majorAuth"></a>
 ##**MajorAuth**
