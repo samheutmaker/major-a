@@ -7,20 +7,19 @@ Major-A is user athentication/authorization, admin, and tracking middleware all 
 
 
 
-
-1 [Getting Started](#gettingStarted)
-2 [Major Router](#majorRouter)
-3 [Major Auth](#majorAuth)
-  *[Register](#register)
-  *[Login](#login)
-  *[Tracking](#tracking)
-[Major Admin](#majorAdmin)
-[major.json](#majorJson)
-[Major Analytics](#majorAnalytics)
-[Overview Tracking](#overviewTracking)
-[Session Tracking](#sessionTracking)
-[Accessing Tracking Data](#accessTracking)
-[Contributors](#contributors)
+1. [Getting Started](#gettingStarted)
+2. [Major Router](#majorRouter)
+  * [Register](#register)
+  * [Login](#login)
+  * [Tracking](#tracking) 
+3. [Major Auth](#majorAuth)
+4. [Major Admin](#majorAdmin)
+  * [major.json](#majorJson)
+5. [Major Analytics](#majorAnalytics)
+  * [Overview Tracking](#overviewTracking)
+  * [Session Tracking](#sessionTracking)
+  * [Accessing Tracking Data](#accessTracking)
+6. [Contributors](#contributors)
 
 
 <a name="gettingStarted"></a>
