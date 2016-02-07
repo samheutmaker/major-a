@@ -11,16 +11,13 @@ const PORT = process.env.port || 8888;
 mongoose.connect(
   'YOUR_MONGO_DB_STRING');
 // Require majorA router
-const majorA = require(__dirname + '/index').majorARouter;
-const authCheck = require(__dirname + '/index').majorAAuth;
-const adminCheck = require(__dirname + '/index').majorAAdmin;
+const mRouter = require(__dirname + '/index').majorRouter;
+const mAuth = require(__dirname + '/index').majorAuth;
+const mAdmin = require(__dirname + '/index').majorAdmin;
 // Set Major A Routes
-app.use('/auth', majorA);
-// Start Server
-app.get('/hit', adminCheck, (req, res) => {
-  res.json(req.user);
-});
+app.use('/auth', mRouter);
 
+// Start Server
 app.listen(PORT, () => {
   console.log('Live on PORT ' + PORT);
 });
