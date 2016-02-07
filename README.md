@@ -4,12 +4,16 @@ Simple user authentication and tracking middleware for Connect/Express.
 
 Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user actvities per session, with a new session beginning everytime a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity. 
 ###Table of Contents
-[Getting Started](#gettingStarted)
-[Major Router](#majorRouter)
-[Major Auth](#majorAuth)
-[Register](#register)
-[Login](#login)
-[Tracking](#tracking)
+
+
+
+
+1 [Getting Started](#gettingStarted)
+2 [Major Router](#majorRouter)
+3 [Major Auth](#majorAuth)
+  *[Register](#register)
+  *[Login](#login)
+  *[Tracking](#tracking)
 [Major Admin](#majorAdmin)
 [major.json](#majorJson)
 [Major Analytics](#majorAnalytics)
