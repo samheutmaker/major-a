@@ -2,7 +2,7 @@
 
 Simple user authentication and tracking middleware for Connect/Express.
 
-Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user actvities per session, with a new session beginning everytime a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity. 
+Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user activities per session, with a new session beginning every time a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity.
 ###Table of Contents
 
 
@@ -11,7 +11,7 @@ Major-A is user athentication/authorization, admin, and tracking middleware all 
 2. [Major Router](#majorRouter)
   * [Register](#register)
   * [Login](#login)
-  * [Tracking](#tracking) 
+  * [Tracking](#tracking)
 3. [Major Auth](#majorAuth)
 4. [Major Admin](#majorAdmin)
   * [major.json](#majorJson)
@@ -34,7 +34,7 @@ const m = require('major-a');
 // Create majorA Utilities
 const mRouter  = m.majorRouter;
 const mAuth   = m.majorAuth;
-const mAdmin  = m.majorAdmin; 
+const mAdmin  = m.majorAdmin;
 ```
 NOTE: You must connect to your MongoDB instance before you require Major-A
 ```.js
@@ -49,12 +49,12 @@ const m = require('major-a');
 // Create majorA Utilities
 const mRouter  = m.majorRouter;
 const mAuth   = m.majorAuth;
-const mAdmin  = m.majorAdmin; 
+const mAdmin  = m.majorAdmin;
 ```
 <a name="majorRouter"></a>
 ##**MajorRouter**
 
-MajorRouter contains three routes: one for registering a new user, one for logging in an existing user, and one that requires admin privilages and returns the tracking profile of the specified user.
+MajorRouter contains three routes: one for registering a new user, one for logging in an existing user, and one that requires admin privileges and returns the tracking profile of the specified user.
 
 ###Routes
 <a name="register"></a>
@@ -66,33 +66,33 @@ The `/register` route supports the `POST` HTTP verb and is used to register new 
 {
 "authentication": {
   "email" : "example@example.com",
-  "password" : "exmaple"
+  "password" : "example"
   }
 }
 ```
-This route creates a new user in the database and returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the header of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
+This route creates a new user in the database and returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the header of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in.
 
 <a name="login"></a>
 ####/login
 
-The `/login` route supports the `GET` HTTP verb and is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be seperated by a colon BEFORE being encoded and the word 'Basic' with a space after it should preprend the encoded string. The following is an exmaple of preparing a username and password for logging in.
+The `/login` route supports the `GET` HTTP verb and is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be separated by a colon BEFORE being encoded and the word 'Basic' with a space after it should prepend the encoded string. The following is an example of preparing a username and password for logging in.
 ```.js
 // user email and password
 var email = 'example@example.com';
 var password = 'password';
-// Concatenate username and password, seperated with a colon
+// Concatenate username and password, separated with a colon
 var authString = email + ':' + password;
 // Encode string in Base64
 authString = btoa(authString);
 
 // This is the final string that should be included in the header
-var finalAuthString = 'Basic ' + authString; 
+var finalAuthString = 'Basic ' + authString;
 ```
-This route returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the headers of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in. 
+This route returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the headers of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in.
 
 <a name="tracking"></a>
 ####/tracking/:id
-The `/tracking/:id` route supports the `GET` HTTP verb and requires administrator privileges to acces. The route returns the tracking information of the user whose _id correpsponds to `:id` in the route.
+The `/tracking/:id` route supports the `GET` HTTP verb and requires administrator privileges to acces. The route returns the tracking information of the user whose _id corresponds to `:id` in the route.
 An example AJAX request to this point that will return the tracking info for a user with an _id of `12345678910` looks like this:
 ```.js
 
@@ -108,7 +108,7 @@ $.ajax.get('http://localhost:8888/tracking/:12345678910', function(data) {
 The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including majorAuth in your route middleware:
 
 ###Getting Started:
-NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package. 
+NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
 ```.js
 
 const express = require('express');
@@ -122,7 +122,7 @@ const m = require('major-a');
 // Create majorA Utilities
 const mRouter  = m.majorRouter;
 const mAuth   = m.majorAuth;
-const mAdmin  = m.majorAdmin; 
+const mAdmin  = m.majorAdmin;
 
 // Protected Route
 app.post('/someprotetedroute', mAuth, (req, res) {
@@ -148,9 +148,9 @@ Major-A supports authentication for administrators through the use of a major.js
 }
 ```
 
-The majorAdmin middleware is used to grant or deny access to administrator routes based on whether or not the users email matches any of the in the major.json``` file. Making a route only accessable to administrators is as easy as:
+The majorAdmin middleware is used to grant or deny access to administrator routes based on whether or not the users email matches any of the in the major.json``` file. Making a route only accessible to administrators is as easy as:
 
-NOTE: majorAdmin should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package. 
+NOTE: majorAdmin should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
 ```.js
 
 const express = require('express');
@@ -164,7 +164,7 @@ const m = require('major-a');
 // Create majorA Utilities
 const mRouter  = m.majorRouter;
 const mAuth   = m.majorAuth;
-const mAdmin  = m.majorAdmin; 
+const mAdmin  = m.majorAdmin;
 
 // Protected Route
 app.post('/someprotetedroute', mAuth, (req, res) {
@@ -174,7 +174,7 @@ app.post('/someprotetedroute', mAuth, (req, res) {
 })
 ```
 
-If the user making the request does not have administator privilages, a 401 Unauthorized will be returned and no further middleware will be executed.
+If the user making the request does not have administrator privileges, a 401 Unauthorized will be returned and no further middleware will be executed.
 
 <a name="majorAnalytics"></a>
 ##**majorAnalytics**
@@ -186,33 +186,31 @@ MajorAnalytics is Major-A's built in analytics package. It will automatically cr
 <a name="overviewTracking"></a>
 ######The overview contains:
 
-Record | As 
---- | --- 
-The date/time the user joined | `Date` 
-How many time the user has logged in | `Number` 
-The total number of requests made by the user | `Number` 
-The complete amount of time spent active by user | `Time, milliseconds` 
-The date/time of the users most recent request | `Date` 
+Record | As
+--- | ---
+The date/time the user joined | `Date`
+How many time the user has logged in | `Number`
+The total number of requests made by the user | `Number`
+The complete amount of time spent active by user | `Time, milliseconds`
+The date/time of the users most recent request | `Date`
 
 <a name="sessionTracking"></a>
 ######Each session contains
-Record | As 
---- | --- 
-The date/time the beginning of this session | `Date` 
-The date/time of the last request made during this session | `Number` 
-The number of requests made by the user during this session | `Number` 
-The duration of this session | `Time, milliseconds` 
+Record | As
+--- | ---
+The date/time the beginning of this session | `Date`
+The date/time of the last request made during this session | `Number`
+The number of requests made by the user during this session | `Number`
+The duration of this session | `Time, milliseconds`
 
-This information is stored in the user 
+This information is stored in the user
 
-MajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it. 
+MajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it.
 
 <a name="accessTracking"></a>
 ####Accessing tracking information through api
-A user with administrator privelages can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to recieve
+A user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive
 
 <a name="contributors"></a>
 ###Contributors
 ####samheutmaker@gmail.com  
-
-
