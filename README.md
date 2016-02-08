@@ -92,11 +92,11 @@ This route returns an authorization token in an object. The token is accessible 
 
 <a name="tracking"></a>
 ####/tracking/:id
-The `/tracking/:id` route supports the `GET` HTTP verb and requires administrator privileges to acces. The route returns the tracking information of the user whose _id corresponds to `:id` in the route.
+The `/tracking/:id` route supports the `GET` HTTP verb and requires administrator privileges to access. The route returns the tracking information of the user whose _id corresponds to `:id` in the route.
 An example AJAX request to this point that will return the tracking info for a user with an _id of `12345678910` looks like this:
 ```.js
 
-$.ajax.get('http://localhost:8888/tracking/:12345678910', function(data) {
+$.ajax.get('http://localhost:8888/tracking/12345678910', function(data) {
  // Log tracking data
  console.log(data);
 });
