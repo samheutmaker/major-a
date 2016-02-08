@@ -39,9 +39,9 @@ const userTracking = require(__dirname + '/lib/analytics/user-tracking');
 var majorA = module.exports = exports = express.Router();
 
 module.exports = {
-  majorARouter: majorA,
-  majorAAuth: authCheck,
-  majorAAdmin: adminCheck()
+  majorRouter: majorA,
+  majorAuth: authCheck,
+  majorAdmin: adminCheck()
 };
 
 //========== ROUTES ==========//
