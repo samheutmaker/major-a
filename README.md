@@ -217,7 +217,7 @@ MajorAnalytics currently only supports tracking for logged in users. If someone 
 ####Accessing user tracking information through API
 A user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive
 
-<a name="resourceTracking"></a>
+<a name="trackingResources"></a>
 ####Resource Tracking
 MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
 ```.js
