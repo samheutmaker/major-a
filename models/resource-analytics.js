@@ -19,18 +19,21 @@ trackingSchema.methods.createNew = function(resourceId, resourceType) {
   this.type = resourceType;
   this.createdOn = new Date();
   this.numberOfTimesViewed = 0;
-  this.save((err, data) => {
-  })
+  this.save((err, data) => {})
 };
 
-// Track resource
-trackingSchema.methods.track = function(userId) {
+trackingSchema.methods.trackAnon = function() {
+    this.numberOfTimesViewed++;
+    this.lastViewed = new Date();
+    this.save((err, data) => {});
+  }
+  // Track resource
+trackingSchema.methods.trackLoggedIn = function(userId) {
   this.numberOfTimesViewed++;
   this.lastViewed = new Date();
   this.lastViewedBy = userId;
   this.viewedBy.push(userId.toString());
-  this.save((err, data) => {
-  });
+  this.save((err, data) => {});
 }
 
 module.exports = exports = mongoose.model('TrackResource', trackingSchema);
