@@ -41,6 +41,8 @@ const m = require('major-a');
 const mRouter  = m.majorRouter;
 const mAuth   = m.majorAuth;
 const mAdmin  = m.majorAdmin;
+const mTracking = majorA.majorAnalytics;
+
 ```
 NOTE: You must connect to your MongoDB instance before you require Major-A
 ```.js
@@ -56,6 +58,7 @@ const m = require('major-a');
 const mRouter  = m.majorRouter;
 const mAuth   = m.majorAuth;
 const mAdmin  = m.majorAdmin;
+const mTracking = majorA.majorAnalytics;
 ```
 <a name="majorRouter"></a>
 ##**MajorRouter**
