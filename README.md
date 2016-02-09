@@ -25,6 +25,7 @@ NOTE:  **MajorAnalytics can now also track resources that you have defined.** Fo
   * [Session Tracking](#sessionTracking)
   * [Accessing User Tracking Data](#accessTracking)
   * [Tracking Resources](#trackingResources)
+  * [Using resource tracking without mAuth or mAdmin](#withoutAuth)
 6. [Contributors](#contributors)
 
 
@@ -223,7 +224,7 @@ A user with administrator privileges can access the tracking information of any 
 <a name="trackingResources"></a>
 ####Resource Tracking
 
-**NOTE: Resource tracking only works for resources whose access routes require mAuth or mAdmin**
+**NOTE: Resource tracking by default only works for resources whose access routes require mAuth or mAdmin. To use resource tracking on routes that do not require mAdmin or mAuth, see [Using resource tracking without mAuth or mAdmin](#withoutAuth)**
 
 
 MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
