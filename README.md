@@ -222,6 +222,10 @@ A user with administrator privileges can access the tracking information of any 
 
 <a name="trackingResources"></a>
 ####Resource Tracking
+
+**NOTE: Resource tracking only works for resources whose access routes require mAuth or mAdmin**
+
+
 MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
 ```.js
 const express = require('express');
