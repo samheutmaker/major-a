@@ -3,7 +3,10 @@
 Simple user authentication and tracking middleware for Connect/Express.
 
 Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user activities per session, with a new session beginning every time a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity. 
-NOTE: **MajorAnalytics can now also track resources that you have defined.** For more information on resource tracking, see [Resource tacking](#resourceTracking).
+
+
+NOTE:  **MajorAnalytics can now also track resources that you have defined.** For more information on resource tracking, see [Tracking Resources](#trackingResources)
+
 
 ###Table of Contents
 
@@ -21,7 +24,7 @@ NOTE: **MajorAnalytics can now also track resources that you have defined.** For
   * [Overview Tracking](#overviewTracking)
   * [Session Tracking](#sessionTracking)
   * [Accessing User Tracking Data](#accessTracking)
-  * [Resource tacking](#resourceTracking)
+  * [Tracking Resources](#trackingResources)
 6. [Contributors](#contributors)
 
 
@@ -211,8 +214,59 @@ This information is stored in the user
 MajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it.
 
 <a name="accessTracking"></a>
-####Accessing tracking information through api
+####Accessing tracking information through API
 A user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive
+
+<a name="resourceTracking"></a>
+####Resource Tracking
+MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document to the `majorAnalytics.createTracker` function like so:
+```.js
+const express = require('express');
+// Require Json Parser to handle POST
+const jsonParser = require('body-parser').json();
+// Require Event model
+const Event = require(__dirname + '/../models/event.js');
+// Require MajorA 
+const majorA = require('major-a');
+// Require MajorA Analytics
+const mTracking = majorA.majorAnalytics;
+// Require MajorA Auth
+const mAuth = majorA.majorAuth;
+// Require MajorA Admin
+const mAdmin = majorA.majorAdmin;
+
+
+// Create new Express Router and export 
+const eventRouter = module.exports = exports = express.Router();
+
+//Create new event
+eventRouter.post('/new', mAdmin, jsonParser, (req, res) => {
+	// Create new event
+	var newEvent = new Event(req.body);
+	// Save params
+	newEvent.name = req.body.name;
+	newEvent.description = req.body.description;
+	newEvent.date = req.body.date;
+	newEvent.postedOn = new Date();
+	newEvent.owner_id = req.user._id;
+	// Save new event 
+	newEvent.save((err, event) => {
+		// Error or no data
+		if(err || !event) {
+			return res.status(500).json({
+				msg: 'Error creating event'
+			});
+		}
+		// Create New Tracker
+		mTracking.createTracker(event._id, 'event');
+		// Return new event data
+		res.status(200).json({
+			msg: 'Successfully Created',
+			event: event
+		});
+	})
+});
+```
 
 <a name="contributors"></a>
 ###Contributors
