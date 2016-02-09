@@ -115,7 +115,7 @@ $.ajax.get('http://localhost:8888/tracking/12345678910', function(data) {
 <a name="majorAuth"></a>
 ##**MajorAuth**
 
-The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#trackResources) Protecting a route is as easy as including majorAuth in your route middleware:
+The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#trackResources). Protecting a route is as easy as including majorAuth in your route middleware:
 
 ###Getting Started:
 NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
