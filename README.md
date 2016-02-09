@@ -115,7 +115,7 @@ $.ajax.get('http://localhost:8888/tracking/12345678910', function(data) {
 <a name="majorAuth"></a>
 ##**MajorAuth**
 
-The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. Protecting a route is as easy as including majorAuth in your route middleware:
+The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#trackResources) Protecting a route is as easy as including majorAuth in your route middleware:
 
 ###Getting Started:
 NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
@@ -135,7 +135,7 @@ const mAuth   = m.majorAuth;
 const mAdmin  = m.majorAdmin;
 
 // Protected Route
-app.post('/someprotetedroute', mAuth, (req, res) {
+app.post('/someprotetedroute', mAuth(), (req, res) {
   // This will only run if the request the passes the authentication check
   // the user object is accessible through req.user
   // Do protected stuff here
@@ -177,7 +177,7 @@ const mAuth   = m.majorAuth;
 const mAdmin  = m.majorAdmin;
 
 // Protected Route
-app.post('/someprotetedroute', mAuth, (req, res) {
+app.post('/someprotetedroute', mAdmin, (req, res) {
   // This will only run if the request the passes the authentication check
   // the user object is accessible through req.user
   // Do protected stuff here
@@ -299,7 +299,7 @@ const mAdmin = majorA.majorAdmin;
 const eventRouter = module.exports = exports = express.Router();
 
 // Get single event
-eventRouter.get('/detail/:id', mAuth, (req, res) => {
+eventRouter.get('/detail/:id', mAuth(), (req, res) => {
 	// Find event
 	Event.findOne({_id: req.params.id}, (err, event) => {
 		// Err finding event
@@ -325,7 +325,10 @@ eventRouter.get('/detail/:id', mAuth, (req, res) => {
 })
 ```
 We pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack` updated the resource tracking document modifies the event document whose `_id` corresponds to the `event._id` that we passed as the first parameter.
+<a name="withoutAith"></a>
+######Using resource tracking without mAuth or mAdmin
 
+In order to use resource tracking on routes that do not require authorization, you must pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, but will not interfere with the analytics.
 
 <a name="contributors"></a>
 ###Contributors
