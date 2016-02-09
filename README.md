@@ -214,12 +214,12 @@ This information is stored in the user
 MajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it.
 
 <a name="accessTracking"></a>
-####Accessing tracking information through API
+####Accessing user tracking information through API
 A user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive
 
 <a name="resourceTracking"></a>
 ####Resource Tracking
-MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document to the `majorAnalytics.createTracker` function like so:
+MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
 ```.js
 const express = require('express');
 // Require Json Parser to handle POST
@@ -267,6 +267,57 @@ eventRouter.post('/new', mAdmin, jsonParser, (req, res) => {
 	})
 });
 ```
+In this example, `event._id` is passed the first parameter and the string `event` is passed as the second. The `Event` model is separate from MajorA and has been required in from `/../models/event.js`. This will create a new tracking document and store it in the `trackresources` collection of your Mongo instance.
+
+After the document has been created, you must track every request made to the document. Pass the `._id` of the event requested and the `_id` of the user making the request to the `majorAnalytics.track` function. Here is an example of tracking an event resource when a user makes a request for it.
+
+```.js
+const express = require('express');
+// Require Json Parser to handle POST
+const jsonParser = require('body-parser').json();
+// Require Event model
+const Event = require(__dirname + '/../models/event.js');
+// Require MajorA 
+const majorA = require('major-a');
+// Require MajorA Analytics
+const mTracking = majorA.majorAnalytics;
+// Require MajorA Auth
+const mAuth = majorA.majorAuth;
+// Require MajorA Admin
+const mAdmin = majorA.majorAdmin;
+
+
+// Create new Express Router and export 
+const eventRouter = module.exports = exports = express.Router();
+
+// Get single event
+eventRouter.get('/detail/:id', mAuth, (req, res) => {
+	// Find event
+	Event.findOne({_id: req.params.id}, (err, event) => {
+		// Err finding event
+		if(err) {
+			return res.status(500).json({
+				msg: 'There was an error retrieving'
+			});
+		} 
+		// No Event found
+		if(!event) {
+			return res.status(200).json({
+				msg: 'No event found'
+			});
+		}
+
+		// Track request
+		 mTracking.track(event._id, req.user._id);
+		 // Return event
+		 res.status(200).json({
+		 	event: event
+		 });
+	});	
+})
+```
+We pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack` updated the resource tracking document modifies the event document whose `_id` corresponds to the `event._id` that we passed as the first parameter.
+
 
 <a name="contributors"></a>
 ###Contributors
