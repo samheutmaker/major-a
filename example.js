@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.port || 8888;
 // Connect to DB
 mongoose.connect(
-  'YOUR_MONGO_DB_STRING');
+  'mongodb://samheutmaker:kingpin13@apollo.modulusmongo.net:27017/yvuxe4vU');
 // Require majorA router
 const mRouter = require(__dirname + '/index').majorRouter;
 const mAuth = require(__dirname + '/index').majorAuth;

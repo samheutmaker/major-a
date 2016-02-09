@@ -27,6 +27,7 @@ const mongoose = require('mongoose');
 const basicHTTP = require(__dirname + '/lib/basic-http');
 const authCheck = require(__dirname + '/lib/check-token');
 const adminCheck = require(__dirname + '/lib/admin-check')(adminList);
+const resourceTracking = require(__dirname + '/lib/analytics/resource-tracking');
 
 // Models
 const User = require(__dirname + '/models/user');
@@ -41,7 +42,8 @@ var majorA = module.exports = exports = express.Router();
 module.exports = {
   majorRouter: majorA,
   majorAuth: authCheck,
-  majorAdmin: adminCheck()
+  majorAdmin: adminCheck(),
+  majorAnalytics: resourceTracking
 };
 
 //========== ROUTES ==========//
