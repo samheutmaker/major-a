@@ -18,7 +18,7 @@ NOTE:  **MajorAnalytics can now also track resources that you have defined.** Fo
   * [Login](#login)
   * [Tracking](#tracking)
 3. [Major Auth](#majorAuth)
-  * [Optional Paramter](#optional)
+  * [Optional Parameter](#optional)
 4. [Major Admin](#majorAdmin)
   * [major.json](#majorJson)
 5. [Major Analytics](#majorAnalytics)
@@ -229,7 +229,7 @@ MajorAnalytics currently only supports tracking for logged in users. If someone 
 
 <a name="accessTracking"></a>
 ####Accessing user tracking information through API
-A user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive
+A user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive. For more information about the majorRouter tracking route see [Tracking](#tracking)
 
 <a name="trackingResources"></a>
 ####Resource Tracking
