@@ -18,6 +18,7 @@ NOTE:  **MajorAnalytics can now also track resources that you have defined.** Fo
   * [Login](#login)
   * [Tracking](#tracking)
 3. [Major Auth](#majorAuth)
+  * [Optional Paramter](#optional)
 4. [Major Admin](#majorAdmin)
   * [major.json](#majorJson)
 5. [Major Analytics](#majorAnalytics)
@@ -25,7 +26,7 @@ NOTE:  **MajorAnalytics can now also track resources that you have defined.** Fo
   * [Session Tracking](#sessionTracking)
   * [Accessing User Tracking Data](#accessTracking)
   * [Tracking Resources](#trackingResources)
-  * [Using resource tracking without mAuth or mAdmin](#withoutAuth)
+  * [Tracking resource with anonymous users](#withoutAuth)
 6. [Contributors](#contributors)
 
 
@@ -143,6 +144,15 @@ app.post('/someprotetedroute', mAuth(), (req, res) {
 ```
 
 If the user making the request does not have an authorization token, a 401 Unauthorized will be returned and no further middleware will be executed.
+
+NOTE: If you are not using majorAnalytics resource tracking, you can skip the next sections
+
+<a name="optional"></a>
+
+###mAuth Optional Parameter
+MajorAuth takes an optional boolean parameter, like `mAuth(true)` or `mAuth(false)`. This optional value only needs to be included on routes that retreive resources. A `true` value will allows users that are not logged in to still access the resource, the analytics for the resource they access are just measured differently.
+
+For more info about resource tracking, see [Resource Tracking](#trackResources).
 
 <a name="majorAdmin"></a>
 ##**MajorAdmin**
@@ -328,7 +338,9 @@ We pass `event._id` and `req.user._id` to `mTracking.track` to record the reques
 <a name="withoutAith"></a>
 ######Using resource tracking without mAuth or mAdmin
 
-In order to use resource tracking on routes that do not require authorization, you must pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, but will not interfere with the analytics.
+In order to use resource tracking on routes that do not require authorization, you must still include `mAuth` and pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, the analytics will just be measured differently. 
+
+For more infomation about mAuth, see [majorAuth](#majorAuth)
 
 <a name="contributors"></a>
 ###Contributors
