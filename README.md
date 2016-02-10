@@ -2,7 +2,7 @@
 
 Simple user authentication and tracking middleware for Connect/Express.
 
-Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user activities per session, with a new session beginning every time a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity. 
+Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user activities per session, with a new session beginning every time a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity.
 
 
 NOTE:  **MajorAnalytics can now also track resources that you have defined.** For more information on resource tracking, see [Tracking Resources](#trackingResources)
@@ -244,7 +244,7 @@ const express = require('express');
 const jsonParser = require('body-parser').json();
 // Require Event model
 const Event = require(__dirname + '/../models/event.js');
-// Require MajorA 
+// Require MajorA
 const majorA = require('major-a');
 // Require MajorA Analytics
 const mTracking = majorA.majorAnalytics;
@@ -254,7 +254,7 @@ const mAuth = majorA.majorAuth;
 const mAdmin = majorA.majorAdmin;
 
 
-// Create new Express Router and export 
+// Create new Express Router and export
 const eventRouter = module.exports = exports = express.Router();
 
 //Create new event
@@ -267,7 +267,7 @@ eventRouter.post('/new', mAdmin, jsonParser, (req, res) => {
 	newEvent.date = req.body.date;
 	newEvent.postedOn = new Date();
 	newEvent.owner_id = req.user._id;
-	// Save new event 
+	// Save new event
 	newEvent.save((err, event) => {
 		// Error or no data
 		if(err || !event) {
@@ -295,7 +295,7 @@ const express = require('express');
 const jsonParser = require('body-parser').json();
 // Require Event model
 const Event = require(__dirname + '/../models/event.js');
-// Require MajorA 
+// Require MajorA
 const majorA = require('major-a');
 // Require MajorA Analytics
 const mTracking = majorA.majorAnalytics;
@@ -305,7 +305,7 @@ const mAuth = majorA.majorAuth;
 const mAdmin = majorA.majorAdmin;
 
 
-// Create new Express Router and export 
+// Create new Express Router and export
 const eventRouter = module.exports = exports = express.Router();
 
 // Get single event
@@ -317,7 +317,7 @@ eventRouter.get('/detail/:id', mAuth(), (req, res) => {
 			return res.status(500).json({
 				msg: 'There was an error retrieving'
 			});
-		} 
+		}
 		// No Event found
 		if(!event) {
 			return res.status(200).json({
@@ -331,16 +331,16 @@ eventRouter.get('/detail/:id', mAuth(), (req, res) => {
 		 res.status(200).json({
 		 	event: event
 		 });
-	});	
+	});
 })
 ```
 We pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack` updated the resource tracking document modifies the event document whose `_id` corresponds to the `event._id` that we passed as the first parameter.
 <a name="withoutAuth"></a>
 #####Using resource tracking without mAuth or mAdmin
 
-In order to use resource tracking on routes that do not require authorization, you must still include `mAuth` and pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, the analytics will just be measured differently. 
+In order to use resource tracking on routes that do not require authorization, you must still include `mAuth` and pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, the analytics will just be measured differently.
 
-For more infomation about mAuth, see [majorAuth](#majorAuth)
+For more information about mAuth, see [majorAuth](#majorAuth)
 
 <a name="contributors"></a>
 ###Contributors
