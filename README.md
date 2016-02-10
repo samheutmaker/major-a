@@ -335,7 +335,7 @@ eventRouter.get('/detail/:id', mAuth(), (req, res) => {
 })
 ```
 We pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack` updated the resource tracking document modifies the event document whose `_id` corresponds to the `event._id` that we passed as the first parameter.
-<a name="withoutAith"></a>
+<a name="withoutAuth"></a>
 ######Using resource tracking without mAuth or mAdmin
 
 In order to use resource tracking on routes that do not require authorization, you must still include `mAuth` and pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, the analytics will just be measured differently. 
