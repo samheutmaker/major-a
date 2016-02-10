@@ -7,7 +7,7 @@ Simple user authentication and tracking middleware for Connect/Express.
 Major-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user activities per session, with a new session beginning every time a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity.
 
 
-NOTE:  **MajorAnalytics can now also track resources that you have defined.** For more information on resource tracking, see [Tracking Resources](#trackingResources)
+NOTE:  MajorAnalytics can now also track resources that you have defined. For more information on resource tracking, see [Tracking Resources](#trackingResources)
 
 
 ###Table of Contents
