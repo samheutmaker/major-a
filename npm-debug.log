@@ -1,0 +1,113 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/samuel/.node/bin/node',
+1 verbose cli   '/Users/samuel/.node/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@2.14.7
+3 info using node@v4.2.3
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/samuel/Desktop/major-a',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/samuel/.npm/major-a/1.2.32/package.tgz not in flight; packing
+9 verbose tar pack [ '/Users/samuel/.npm/major-a/1.2.32/package.tgz',
+9 verbose tar pack   '/Users/samuel/Desktop/major-a' ]
+10 verbose tarball /Users/samuel/.npm/major-a/1.2.32/package.tgz
+11 verbose folder /Users/samuel/Desktop/major-a
+12 info prepublish major-a@1.2.32
+13 verbose addLocalTarball adding from inside cache /Users/samuel/.npm/major-a/1.2.32/package.tgz
+14 silly cache afterAdd major-a@1.2.32
+15 verbose afterAdd /Users/samuel/.npm/major-a/1.2.32/package/package.json not in flight; writing
+16 verbose afterAdd /Users/samuel/.npm/major-a/1.2.32/package/package.json written
+17 silly publish { name: 'major-a',
+17 silly publish   version: '1.2.32',
+17 silly publish   description: 'A simple and easy to implement user authentication and tracking module for Express.',
+17 silly publish   main: 'index.js',
+17 silly publish   scripts: { test: 'mocha /tests/auth-routes_test' },
+17 silly publish   repository:
+17 silly publish    { type: 'git',
+17 silly publish      url: 'git+https://github.com/samheutmaker/major-a.git' },
+17 silly publish   keywords:
+17 silly publish    [ 'user',
+17 silly publish      'athentication',
+17 silly publish      'tracking',
+17 silly publish      'analytics',
+17 silly publish      'security',
+17 silly publish      'bcrypt' ],
+17 silly publish   author: { name: 'samheutmaker@gmail.com' },
+17 silly publish   license: 'MIT',
+17 silly publish   bugs: { url: 'https://github.com/samheutmaker/major-a/issues' },
+17 silly publish   homepage: 'https://github.com/samheutmaker/major-a#readme',
+17 silly publish   dependencies:
+17 silly publish    { bcrypt: '^0.8.5',
+17 silly publish      'body-parser': '^1.14.2',
+17 silly publish      colors: '^1.1.2',
+17 silly publish      jsonwebtoken: '^5.5.4',
+17 silly publish      lodash: '^4.2.1' },
+17 silly publish   devDependencies:
+17 silly publish    { chai: '^3.5.0',
+17 silly publish      'chai-http': '^2.0.1',
+17 silly publish      express: '^4.13.4',
+17 silly publish      mocha: '^2.4.5',
+17 silly publish      mongoose: '^4.4.3' },
+17 silly publish   readme: '# major-a\n\nSimple user authentication and tracking middleware for Connect/Express.\n\nMajor-A is user athentication/authorization, admin, and tracking middleware all rolled into one. It uses bcrypt to hash passwords and JSON web tokens for user authentication. It tracks user activities per session, with a new session beginning every time a user that has been inactive for 5 minutes makes a request. In addition to sessions, Major-A keeps an easily-interpretable running log of every users activity.\n\n\nNOTE:  **MajorAnalytics can now also track resources that you have defined.** For more information on resource tracking, see [Tracking Resources](#trackingResources)\n\n\n###Table of Contents\n\n\n\n1. [Getting Started](#gettingStarted)\n2. [Major Router](#majorRouter)\n  * [Register](#register)\n  * [Login](#login)\n  * [Tracking](#tracking)\n3. [Major Auth](#majorAuth)\n  * [Optional Parameter](#optional)\n4. [Major Admin](#majorAdmin)\n  * [major.json](#majorJson)\n5. [Major Analytics](#majorAnalytics)\n  * [Overview Tracking](#overviewTracking)\n  * [Session Tracking](#sessionTracking)\n  * [Accessing User Tracking Data](#accessTracking)\n  * [Tracking Resources](#trackingResources)\n  * [Tracking resource with anonymous users](#withoutAuth)\n6. [Contributors](#contributors)\n\n\n<a name="gettingStarted"></a>\n###Getting Started:\n```\n$ npm install --save major-a\n```\n\n```.js\nconst m = require(\'major-a\');\n\n// Create majorA Utilities\nconst mRouter  = m.majorRouter;\nconst mAuth   = m.majorAuth;\nconst mAdmin  = m.majorAdmin;\nconst mTracking = majorA.majorAnalytics;\n\n```\nNOTE: You must connect to your MongoDB instance before you require Major-A\n```.js\n// Require mongoose\nconst mongoose = require(\'mongoose\');\n// Connect to MONGO DB\nmongoose.connect(\'YOUR_MONGO_DB_STRING\');\n\n// Now you can require Major-A\nconst m = require(\'major-a\');\n\n// Create majorA Utilities\nconst mRouter  = m.majorRouter;\nconst mAuth   = m.majorAuth;\nconst mAdmin  = m.majorAdmin;\nconst mTracking = majorA.majorAnalytics;\n```\n<a name="majorRouter"></a>\n##**MajorRouter**\n\nMajorRouter contains three routes: one for registering a new user, one for logging in an existing user, and one that requires admin privileges and returns the tracking profile of the specified user.\n\n###Routes\n<a name="register"></a>\n####/register\n\nThe `/register` route supports the `POST` HTTP verb and is used to register new users. Registration requires as email and a password. Data must be passed as JSON in the body of the request in an object whose key is \'authentication\' like so:\n\n```.json\n{\n"authentication": {\n  "email" : "example@example.com",\n  "password" : "example"\n  }\n}\n```\nThis route creates a new user in the database and returns an authorization token in an object. The token is accessible through the \'token\' key. This token should be saved on the client side and sent in the header of every request as the value of the key \'token\'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in.\n\n<a name="login"></a>\n####/login\n\nThe `/login` route supports the `GET` HTTP verb and is used for logging in existing users. The email and password of the user must sent as a Base64 encoded string in the header of the request using Basic HTTP. The email and password MUST be separated by a colon BEFORE being encoded and the word \'Basic\' with a space after it should prepend the encoded string. The following is an example of preparing a username and password for logging in.\n```.js\n// user email and password\nvar email = \'example@example.com\';\nvar password = \'password\';\n// Concatenate username and password, separated with a colon\nvar authString = email + \':\' + password;\n// Encode string in Base64\nauthString = btoa(authString);\n\n// This is the final string that should be included in the header\nvar finalAuthString = \'Basic \' + authString;\n```\nThis route returns an authorization token in an object. The token is accessible through the \'token\' key. This token should be saved on the client side and sent in the headers of every request as the value of the key \'token\'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in.\n\n<a name="tracking"></a>\n####/tracking/:id\nThe `/tracking/:id` route supports the `GET` HTTP verb and requires administrator privileges to access. The route returns the tracking information of the user whose _id corresponds to `:id` in the route.\nAn example AJAX request to this point that will return the tracking info for a user with an _id of `12345678910` looks like this:\n```.js\n\n$.ajax.get(\'http://localhost:8888/tracking/12345678910\', function(data) {\n // Log tracking data\n console.log(data);\n});\n````\n\n<a name="majorAuth"></a>\n##**MajorAuth**\n\nThe majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#trackResources). Protecting a route is as easy as including majorAuth in your route middleware:\n\n###Getting Started:\nNOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.\n```.js\n\nconst express = require(\'express\');\nconst mongoose = require(\'mongoose\');\n// Create express app\nconst app = express();\n// Connect to MONGO DB\nmongoose.connect(\'YOUR_MONGO_DB_STRING\');\n// require Major-A\nconst m = require(\'major-a\');\n// Create majorA Utilities\nconst mRouter  = m.majorRouter;\nconst mAuth   = m.majorAuth;\nconst mAdmin  = m.majorAdmin;\n\n// Protected Route\napp.post(\'/someprotetedroute\', mAuth(), (req, res) {\n  // This will only run if the request the passes the authentication check\n  // the user object is accessible through req.user\n  // Do protected stuff here\n})\n```\n\nIf the user making the request does not have an authorization token, a 401 Unauthorized will be returned and no further middleware will be executed.\n\nNOTE: If you are not using majorAnalytics resource tracking, you can skip the next sections\n\n<a name="optional"></a>\n\n###mAuth Optional Parameter\nMajorAuth takes an optional boolean parameter, like `mAuth(true)` or `mAuth(false)`. This optional value only needs to be included on routes that retreive resources. A `true` value will allows users that are not logged in to still access the resource, the analytics for the resource they access are just measured differently.\n\nFor more info about resource tracking, see [Resource Tracking](#trackResources).\n\n<a name="majorAdmin"></a>\n##**MajorAdmin**\n\n###Getting Started\nMajor-A supports authentication for administrators through the use of a major.json file placed in the root directory of your project. You can add administrators to your project placing their email address in an array with the key ```administrators```.\n\n<a name="majorJson"></a>\n######major.json\n```.json\n{\n  "administrators" : [ "admin@exmaple.com", "admin2@exmaple.com"]\n}\n```\n\nThe majorAdmin middleware is used to grant or deny access to administrator routes based on whether or not the users email matches any of the in the major.json``` file. Making a route only accessible to administrators is as easy as:\n\nNOTE: majorAdmin should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.\n```.js\n\nconst express = require(\'express\');\nconst mongoose = require(\'mongoose\');\n// Create express app\nconst app = express();\n// Connect to MONGO DB\nmongoose.connect(\'YOUR_MONGO_DB_STRING\');\n// require Major-A\nconst m = require(\'major-a\');\n// Create majorA Utilities\nconst mRouter  = m.majorRouter;\nconst mAuth   = m.majorAuth;\nconst mAdmin  = m.majorAdmin;\n\n// Protected Route\napp.post(\'/someprotetedroute\', mAdmin, (req, res) {\n  // This will only run if the request the passes the authentication check\n  // the user object is accessible through req.user\n  // Do protected stuff here\n})\n```\n\nIf the user making the request does not have administrator privileges, a 401 Unauthorized will be returned and no further middleware will be executed.\n\n<a name="majorAnalytics"></a>\n##**majorAnalytics**\n\n###Getting Started\n\nMajorAnalytics is Major-A\'s built in analytics package. It will automatically create a `useranalytics` collection in your database and store records in it. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all LOGGED IN users and generates the following information for each user.\n\n<a name="overviewTracking"></a>\n######The overview contains:\n\nRecord | As\n--- | ---\nThe date/time the user joined | `Date`\nHow many time the user has logged in | `Number`\nThe total number of requests made by the user | `Number`\nThe complete amount of time spent active by user | `Time, milliseconds`\nThe date/time of the users most recent request | `Date`\n\n<a name="sessionTracking"></a>\n######Each session contains\nRecord | As\n--- | ---\nThe date/time the beginning of this session | `Date`\nThe date/time of the last request made during this session | `Number`\nThe number of requests made by the user during this session | `Number`\nThe duration of this session | `Time, milliseconds`\n\nThis information is stored in the user\n\nMajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it.\n\n<a name="accessTracking"></a>\n####Accessing user tracking information through API\nA user with administrator privileges can access the tracking information of any user through the `/tracking/:id` route in the majorRouter package where `:id` is the id of the user whose data you wish to receive. For more information about the majorRouter tracking route see [Tracking](#tracking)\n\n<a name="trackingResources"></a>\n####Resource Tracking\n\n**NOTE: Resource tracking by default only works for resources whose access routes require mAuth or mAdmin. To use resource tracking on routes that do not require mAdmin or mAuth, see [Using resource tracking without mAuth or mAdmin](#withoutAuth)**\n\n\nMajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:\n```.js\nconst express = require(\'express\');\n// Require Json Parser to handle POST\nconst jsonParser = require(\'body-parser\').json();\n// Require Event model\nconst Event = require(__dirname + \'/../models/event.js\');\n// Require MajorA\nconst majorA = require(\'major-a\');\n// Require MajorA Analytics\nconst mTracking = majorA.majorAnalytics;\n// Require MajorA Auth\nconst mAuth = majorA.majorAuth;\n// Require MajorA Admin\nconst mAdmin = majorA.majorAdmin;\n\n\n// Create new Express Router and export\nconst eventRouter = module.exports = exports = express.Router();\n\n//Create new event\neventRouter.post(\'/new\', mAdmin, jsonParser, (req, res) => {\n\t// Create new event\n\tvar newEvent = new Event(req.body);\n\t// Save params\n\tnewEvent.name = req.body.name;\n\tnewEvent.description = req.body.description;\n\tnewEvent.date = req.body.date;\n\tnewEvent.postedOn = new Date();\n\tnewEvent.owner_id = req.user._id;\n\t// Save new event\n\tnewEvent.save((err, event) => {\n\t\t// Error or no data\n\t\tif(err || !event) {\n\t\t\treturn res.status(500).json({\n\t\t\t\tmsg: \'Error creating event\'\n\t\t\t});\n\t\t}\n\t\t// Create New Tracker\n\t\tmTracking.createTracker(event._id, \'event\');\n\t\t// Return new event data\n\t\tres.status(200).json({\n\t\t\tmsg: \'Successfully Created\',\n\t\t\tevent: event\n\t\t});\n\t})\n});\n```\nIn this example, `event._id` is passed the first parameter and the string `event` is passed as the second. The `Event` model is separate from MajorA and has been required in from `/../models/event.js`. This will create a new tracking document and store it in the `trackresources` collection of your Mongo instance.\n\nAfter the document has been created, you must track every request made to the document. Pass the `._id` of the event requested and the `_id` of the user making the request to the `majorAnalytics.track` function. Here is an example of tracking an event resource when a user makes a request for it.\n\n```.js\nconst express = require(\'express\');\n// Require Json Parser to handle POST\nconst jsonParser = require(\'body-parser\').json();\n// Require Event model\nconst Event = require(__dirname + \'/../models/event.js\');\n// Require MajorA\nconst majorA = require(\'major-a\');\n// Require MajorA Analytics\nconst mTracking = majorA.majorAnalytics;\n// Require MajorA Auth\nconst mAuth = majorA.majorAuth;\n// Require MajorA Admin\nconst mAdmin = majorA.majorAdmin;\n\n\n// Create new Express Router and export\nconst eventRouter = module.exports = exports = express.Router();\n\n// Get single event\neventRouter.get(\'/detail/:id\', mAuth(), (req, res) => {\n\t// Find event\n\tEvent.findOne({_id: req.params.id}, (err, event) => {\n\t\t// Err finding event\n\t\tif(err) {\n\t\t\treturn res.status(500).json({\n\t\t\t\tmsg: \'There was an error retrieving\'\n\t\t\t});\n\t\t}\n\t\t// No Event found\n\t\tif(!event) {\n\t\t\treturn res.status(200).json({\n\t\t\t\tmsg: \'No event found\'\n\t\t\t});\n\t\t}\n\n\t\t// Track request\n\t\t mTracking.track(event._id, req.user._id);\n\t\t // Return event\n\t\t res.status(200).json({\n\t\t \tevent: event\n\t\t });\n\t});\n})\n```\nWe pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack` updated the resource tracking document modifies the event document whose `_id` corresponds to the `event._id` that we passed as the first parameter.\n<a name="withoutAuth"></a>\n#####Using resource tracking without mAuth or mAdmin\n\nIn order to use resource tracking on routes that do not require authorization, you must still include `mAuth` and pass a `true` parameter to `mAuth`. This will allow non-logged in users to the access the path, the analytics will just be measured differently.\n\nFor more information about mAuth, see [majorAuth](#majorAuth)\n\n<a name="contributors"></a>\n###Contributors\n####samheutmaker@gmail.com  \n',
+17 silly publish   readmeFilename: 'README.md',
+17 silly publish   gitHead: '4485110d19fc4f328e1515cc1f1e9fb1d19a632e',
+17 silly publish   _id: 'major-a@1.2.32',
+17 silly publish   _shasum: '5bd261e39dd57b93c56f69d9417f84a774b8e087',
+17 silly publish   _from: '.' }
+18 verbose getPublishConfig undefined
+19 silly mapToRegistry name major-a
+20 silly mapToRegistry using default registry
+21 silly mapToRegistry registry https://registry.npmjs.org/
+22 silly mapToRegistry uri https://registry.npmjs.org/major-a
+23 verbose publish registryBase https://registry.npmjs.org/
+24 silly publish uploading /Users/samuel/.npm/major-a/1.2.32/package.tgz
+25 verbose request uri https://registry.npmjs.org/major-a
+26 verbose request sending authorization for write operation
+27 info attempt registry request try #1 at 20:10:54
+28 verbose request using bearer token for auth
+29 verbose request id 7ed4b9aaaa84bd76
+30 http request PUT https://registry.npmjs.org/major-a
+31 http 403 https://registry.npmjs.org/major-a
+32 verbose headers { 'content-type': 'application/json',
+32 verbose headers   'cache-control': 'max-age=300',
+32 verbose headers   'content-length': '96',
+32 verbose headers   'accept-ranges': 'bytes',
+32 verbose headers   date: 'Wed, 10 Feb 2016 04:08:20 GMT',
+32 verbose headers   via: '1.1 varnish',
+32 verbose headers   connection: 'keep-alive',
+32 verbose headers   'x-served-by': 'cache-lax1427-LAX',
+32 verbose headers   'x-cache': 'MISS',
+32 verbose headers   'x-cache-hits': '0',
+32 verbose headers   'x-timer': 'S1455077300.383003,VS0,VE217' }
+33 verbose request invalidating /Users/samuel/.npm/registry.npmjs.org/major-a on PUT
+34 error publish Failed PUT 403
+35 verbose stack Error: "You cannot publish over the previously published version 1.2.32." : major-a
+35 verbose stack     at makeError (/Users/samuel/.node/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+35 verbose stack     at CachingRegistryClient.<anonymous> (/Users/samuel/.node/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+35 verbose stack     at Request._callback (/Users/samuel/.node/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+35 verbose stack     at Request.self.callback (/Users/samuel/.node/lib/node_modules/npm/node_modules/request/request.js:198:22)
+35 verbose stack     at emitTwo (events.js:87:13)
+35 verbose stack     at Request.emit (events.js:172:7)
+35 verbose stack     at Request.<anonymous> (/Users/samuel/.node/lib/node_modules/npm/node_modules/request/request.js:1063:14)
+35 verbose stack     at emitOne (events.js:82:20)
+35 verbose stack     at Request.emit (events.js:169:7)
+35 verbose stack     at IncomingMessage.<anonymous> (/Users/samuel/.node/lib/node_modules/npm/node_modules/request/request.js:1009:12)
+36 verbose statusCode 403
+37 verbose pkgid major-a
+38 verbose cwd /Users/samuel/Desktop/major-a
+39 error Darwin 15.3.0
+40 error argv "/Users/samuel/.node/bin/node" "/Users/samuel/.node/bin/npm" "publish"
+41 error node v4.2.3
+42 error npm  v2.14.7
+43 error code E403
+44 error "You cannot publish over the previously published version 1.2.32." : major-a
+45 error If you need help, you may report this error at:
+45 error     <https://github.com/npm/npm/issues>
+46 verbose exit [ 1, true ]
