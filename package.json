@@ -1,6 +1,6 @@
 {
   "name": "major-a",
-  "version": "1.2.33",
+  "version": "1.2.34",
   "description": "A simple and easy to implement user authentication and tracking module for Express.",
   "main": "index.js",
   "scripts": {

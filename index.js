@@ -48,7 +48,7 @@ module.exports = {
 
 //========== ROUTES ==========//
 
-// See analytics for signed in user
+// Returns analytics for signed in user
 majorA.get('/tracking/:id', adminCheck(), (req, res) => {
   if (!req.params.id) {
     req.params.id = req.user._id
@@ -59,6 +59,7 @@ majorA.get('/tracking/:id', adminCheck(), (req, res) => {
     res.json(data);
   })
 });
+
 
 // Create new User
 majorA.post('/register', jsonParser, (req, res) => {
