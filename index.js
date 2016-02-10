@@ -62,6 +62,8 @@ majorA.get('/tracking/:id', adminCheck(), (req, res) => {
 
 // Create new User
 majorA.post('/register', jsonParser, (req, res) => {
+  req.body.email = req.body.authentication.email;
+  req.body.password = req.body.authentication.password;
   // Check email and password length
   if (!((req.body.email || "").length && (req.body.password || "").length >
       7)) {

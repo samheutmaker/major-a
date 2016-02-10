@@ -7,9 +7,11 @@ const mongoose = require('mongoose');
 const app = express();
 // Set PORT
 const PORT = process.env.port || 8888;
+
+const dbString = process.env.MONGO_URL ||
+  'mongodb://samheutmaker:kingpin13@apollo.modulusmongo.net:27017/yvuxe4vU';
 // Connect to DB
-mongoose.connect(
-  'mongodb://samheutmaker:kingpin13@apollo.modulusmongo.net:27017/yvuxe4vU');
+mongoose.connect(dbString);
 // Require majorA router
 const mRouter = require(__dirname + '/index').majorRouter;
 const mAuth = require(__dirname + '/index').majorAuth;
