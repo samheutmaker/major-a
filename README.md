@@ -118,7 +118,7 @@ $.ajax.get('http://localhost:8888/tracking/12345678910', function(data) {
 <a name="majorAuth"></a>
 ##**MajorAuth**
 
-The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#trackResources). Protecting a route is as easy as including majorAuth in your route middleware:
+The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#(#trackingResources)). Protecting a route is as easy as including majorAuth in your route middleware:
 
 ###Getting Started:
 NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
@@ -147,7 +147,7 @@ app.post('/someprotetedroute', mAuth(), (req, res) {
 
 If the user making the request does not have an authorization token, a 401 Unauthorized will be returned and no further middleware will be executed.
 
-NOTE: If you are not using majorAnalytics resource tracking, you can skip the next sections
+NOTE: If you are not using majorAnalytics resource tracking, you can skip the next section
 
 <a name="optional"></a>
 
@@ -236,10 +236,9 @@ A user with administrator privileges can access the tracking information of any 
 <a name="trackingResources"></a>
 ####Resource Tracking
 
-**NOTE: Resource tracking by default only works for resources whose access routes require mAuth or mAdmin. To use resource tracking on routes that do not require mAdmin or mAuth, see [Using resource tracking without mAuth or mAdmin](#withoutAuth)**
-
-
 MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
+
+**NOTE: Resource tracking by default only works for resources whose access routes require mAuth or mAdmin. To use resource tracking on routes that do not require mAdmin or mAuth, see [Using resource tracking without mAuth or mAdmin](#withoutAuth)**
 ```.js
 const express = require('express');
 // Require Json Parser to handle POST
