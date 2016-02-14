@@ -121,7 +121,7 @@ $.ajax.get('http://localhost:8888/tracking/12345678910', function(data) {
 The majorAuth middleware is used to grant or deny access to protected routes based on whether or not the user has an authorization token. mAuth is a function that must called in your middlware stack. It takes an optional paramater to allows non logged-in user to access the path, but this is primarily for [resource tracking](#(#trackingResources)). Protecting a route is as easy as including majorAuth in your route middleware:
 
 ###Getting Started:
-NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
+NOTE: majorAuth should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checking the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
 ```.js
 
 const express = require('express');
@@ -160,7 +160,7 @@ For more info about resource tracking, see [Resource Tracking](#trackResources).
 ##**MajorAdmin**
 
 ###Getting Started
-Major-A supports authentication for administrators through the use of a major.json file placed in the root directory of your project. You can add administrators to your project placing their email address in an array with the key ```administrators```.
+Major-A supports authentication for administrators through the use of a major.json file placed in the root directory of your project. You can add administrators to your project by placing their email address in an array with the key ```administrators```.
 
 <a name="majorJson"></a>
 ######major.json
@@ -172,7 +172,7 @@ Major-A supports authentication for administrators through the use of a major.js
 
 The majorAdmin middleware is used to grant or deny access to administrator routes based on whether or not the users email matches any of the in the major.json``` file. Making a route only accessible to administrators is as easy as:
 
-NOTE: majorAdmin should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checkin the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
+NOTE: majorAdmin should always be the first middle registered. DO NOT INCLUDE BOTH majorAdmin and majorAuth as middleware for the same route. majorAdmin takes care of checking the token. Including both majorAdmin and majorAuth would result in a two token checks which can screw up the tracking package.
 ```.js
 
 const express = require('express');
@@ -203,7 +203,7 @@ If the user making the request does not have administrator privileges, a 401 Una
 
 ###Getting Started
 
-MajorAnalytics is Major-A's built in analytics package. It will automatically create a `useranalytics` collection in your database and store records in it. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all LOGGED IN users and generates the following information for each user.
+MajorAnalytics is Major-A's built in analytics package. It will automatically create a `useranalytics` collection in your database and stores records in it. It is broken into two parts: overview and sessions. All sessions belong to an overview and all overviews have exactly one owner, which is the user whose information the overview contains. A new session begins when the user logs in, and end after the user has not made a request for 5 minutes. The logout time for the session is then recorded as the time of the last request made during the session. MajorAnalytics tracks every request made by all users (user must be logged in) and generates the following information for each user.
 
 <a name="overviewTracking"></a>
 ######The overview contains:
@@ -225,8 +225,6 @@ The date/time of the last request made during this session | `Number`
 The number of requests made by the user during this session | `Number`
 The duration of this session | `Time, milliseconds`
 
-This information is stored in the user
-
 MajorAnalytics currently only supports tracking for logged in users. If someone submits an issue requesting tracking for non logged in users, I will make it a priority to add it.
 
 <a name="accessTracking"></a>
@@ -236,7 +234,7 @@ A user with administrator privileges can access the tracking information of any 
 <a name="trackingResources"></a>
 ####Resource Tracking
 
-MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB Instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
+MajorAnalytics provides an API for tracking resources. Resources can be anything that has a mongoose model and is stored in a MongoDB instance. Upon the creation of a new resource document, you must pass the _id of the document and the type of resource as a string to the `majorAnalytics.createTracker` function like so:
 
 **NOTE: Resource tracking by default only works for resources whose access routes require mAuth or mAdmin. To use resource tracking on routes that do not require mAdmin or mAuth, see [Using resource tracking without mAuth or mAdmin](#withoutAuth)**
 ```.js
@@ -288,7 +286,7 @@ eventRouter.post('/new', mAdmin, jsonParser, (req, res) => {
 ```
 In this example, `event._id` is passed the first parameter and the string `event` is passed as the second. The `Event` model is separate from MajorA and has been required in from `/../models/event.js`. This will create a new tracking document and store it in the `trackresources` collection of your Mongo instance.
 
-After the document has been created, you must track every request made to the document. Pass the `._id` of the event requested and the `_id` of the user making the request to the `majorAnalytics.track` function. Here is an example of tracking an event resource when a user makes a request for it.
+After the document has been created, you must track every request made to the document. Pass the `_id` of the resource requested and the `_id` of the user making the request to the `majorAnalytics.track` function. Here is an example of tracking an event resource when a user makes a request for it.
 
 ```.js
 const express = require('express');
@@ -335,7 +333,7 @@ eventRouter.get('/detail/:id', mAuth(), (req, res) => {
 	});
 })
 ```
-We pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack` updated the resource tracking document modifies the event document whose `_id` corresponds to the `event._id` that we passed as the first parameter.
+We pass `event._id` and `req.user._id` to `mTracking.track` to record the request. `mTrack`  updates the resource tracking document whose `_id` corresponds to the `event._id` that we passed as the first parameter.
 <a name="withoutAuth"></a>
 #####Using resource tracking without mAuth or mAdmin
 
