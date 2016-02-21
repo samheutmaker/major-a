@@ -1,1 +1,0 @@
-mongo apollo.modulusmongo.net:27017/egEh5oqe -u <user> -p <pass>
