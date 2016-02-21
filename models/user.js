@@ -10,12 +10,13 @@ var userSchema = mongoose.Schema({
     last: String,
     username: String,
   },
+  age: Number,
+  gender: String,
   authentication: {
     email: String,
     password: String
   }
 });
-//===== User Analytics =====//
 
 
 // Hash user password
