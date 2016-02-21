@@ -94,6 +94,7 @@ majorA.post('/register', jsonParser, (req, res) => {
     newUser.hashPassword(req.body.password);
     newUser.birthday = Date.parse(req.body.birthday);
     newUser.gender = req.body.gender;
+    newUser.username = req.body.username;
     newUser.name.first = req.body.name.first;
     newUser.name.last = req.body.name.last;
     newUser.save((err, user) => {
