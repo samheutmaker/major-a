@@ -83,6 +83,22 @@ The `/register` route supports the `POST` HTTP verb and is used to register new 
   }
 }
 ```
+Major-A supports user attributes besides just email and password. The following is an example of a complete user registration request:
+````.json
+{
+  "name": {
+    "first": "FirstName",
+    "last": "LastName"
+  },
+  "username": "ASickName",
+  "gender": "Male",
+  "birthday": "3/1/1994",
+  "authentication": {
+    "email": "example@example.com",
+    "password": "example"
+  }
+}
+````
 This route creates a new user in the database and returns an authorization token in an object. The token is accessible through the 'token' key. This token should be saved on the client side and sent in the header of every request as the value of the key 'token'. This token represents the users credentials and is valid as long as the user has made a request in the last five minutes. Once the token has been invalidated, the user will have to sign back in.
 
 <a name="login"></a>
