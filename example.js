@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.port || 8888;
 
 const dbString = process.env.MONGO_URL ||
-  'mongodb://samheutmaker:kingpin13@apollo.modulusmongo.net:27017/yvuxe4vU';
+  'MONGO_URI';
 // Connect to DB
 mongoose.connect(dbString);
 // Require majorA router
