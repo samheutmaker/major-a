@@ -67,7 +67,7 @@ majorA.post('/register', jsonParser, (req, res) => {
   req.body.password = req.body.authentication.password;
   // Check email and password length
   if (!((req.body.email || "").length && (req.body.password || "").length >
-      7)) {
+    7)) {
     return res.status(400).json({
       msg: 'Email or password not long enough'
     })
@@ -90,29 +90,32 @@ majorA.post('/register', jsonParser, (req, res) => {
     }
     // Create new user
     var newUser = new User();
-    newUser.authentication.email = req.body.email;
-    newUser.hashPassword(req.body.password);
-    newUser.birthday   = (req.body.birthday) ? Date.parse(req.body.birthday) : null;
-    newUser.gender     = (req.body.gender) ? req.body.gender : null;
-    newUser.username   = (req.body.username) ? req.body.username : null;
-    newUser.name.first = (req.body.name.first) ? req.body.name.first : null;
-    newUser.name.last  = (req.body.name.first) ? req.body.name.first : null;
-    newUser.save((err, user) => {
-      if (err || !user) {
-        return res.status(500).json({
-          msg: 'Error creating user'
-        });
-      }
+    try {
+      newUser.authentication.email = req.body.email;
+      newUser.hashPassword(req.body.password);
+      newUser.birthday = (req.body.birthday) ? Date.parse(req.body.birthday) : null;
+      newUser.gender = (req.body.gender) ? req.body.gender : null;
+      newUser.username = (req.body.username) ? req.body.username : null;
+      newUser.name.first = (req.body.name) ? req.body.name.first : null;
+      newUser.name.last = (req.body.name) ? req.body.name.first : null;
+      newUser.save((err, user) => {
+        if (err || !user) {
+          return res.status(500).json({
+            msg: 'Error creating user'
+          });
+        }
 
-      // Create analytics for new user
-      userTracking.createNew(user._id);
+        // Create analytics for new user
+        userTracking.createNew(user._id);
 
-      // Send Response
-      res.status(200).json({
-        token: user.generateToken(),
-        user: user
-      })
-    });
+        // Send Response
+        res.status(200).json({
+          token: user.generateToken(),
+          user: user
+        })
+      });
+    }
+
   });
 });
 
