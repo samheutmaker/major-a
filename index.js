@@ -88,9 +88,10 @@ majorA.post('/register', jsonParser, (req, res) => {
         msg: 'User already Exists'
       })
     }
-    // Create new user
-    var newUser = new User();
+
     try {
+      // Create new user
+      var newUser = new User();
       newUser.authentication.email = req.body.email;
       newUser.hashPassword(req.body.password);
       newUser.birthday = (req.body.birthday) ? Date.parse(req.body.birthday) : null;
@@ -114,8 +115,11 @@ majorA.post('/register', jsonParser, (req, res) => {
           user: user
         })
       });
+    } catch (e) {
+      res.status(500).json({
+        msg: 'There was an error register the user.'
+      });
     }
-
   });
 });
 
