@@ -10,7 +10,7 @@ Major-A is user athentication/authorization, admin, and tracking middleware all 
 NOTE:  MajorAnalytics can now also track resources that you have defined. For more information on resource tracking, see [Tracking Resources](#trackingResources)
 
 
-###Table of Contents
+### Table of Contents
 
 
 
@@ -33,7 +33,7 @@ NOTE:  MajorAnalytics can now also track resources that you have defined. For mo
 
 
 <a name="gettingStarted"></a>
-###Getting Started:
+### Getting Started:
 ```
 $ npm install --save major-a
 ```
